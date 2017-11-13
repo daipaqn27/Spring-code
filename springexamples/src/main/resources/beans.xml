@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+		>
+		<!-- default-init-method="initMessage" default-destroy-method="release" -->
+		
+		<bean id="helloJavaClazz" class="edu.java.spring.HelloClazz">
+			<property name="clazzes">
+				<list>
+					<ref bean="jee01"/>
+					<null/>
+				</list>
+			</property>
+		</bean>
+		
+		<bean id="helloJavaClazz2" class="edu.java.spring.HelloClazz" >
+			<!-- init-method="initMessage" -->
+			<!-- <constructor-arg ref="helloJavaClazz"/> -->
+			<property name="message" value="Hello Bean Inheritance"></property>
+		</bean>
+		
+		<bean id="helloWorld" class="edu.java.spring.HelloWorld" >
+			<!-- parent="sampleTeamplate" -->
+			<!-- <constructor-arg type="java.lang.String" value="Tung"/> -->
+			<property name="message" value="Hello Bean Inheritance"></property>
+			<property name="clazz">
+				<bean id="helloJavaClazz3" class="edu.java.spring.HelloClazz">
+					<property name="message" value="Hello Class Instance is Inner Bean"></property>
+				</bean>
+			</property>
+		</bean>
+		
+		<!-- Use autowriring -->
+		<bean id="helloWorld1" class="edu.java.spring.HelloWorld" autowire="byName">
+			<property name="message" value="Hello Bean Inheritance"></property>
+		</bean>
+		<bean id="clazz" class="edu.java.spring.HelloClazz">
+			<property name="message" value="Hello Class Instance is Inner Bean"></property>
+		</bean>
+		
+		<bean id="jee01" class="edu.java.spring.JavaClazz">
+			<property name="students">
+				<map>
+					<entry key="Nguyen Van A" value="23" />
+					<entry key="Tran THi B" value="18"/>
+					<entry key="Le Tran C" value="25"/>
+					<entry key="Hoang Van D" value="34"/>
+				</map>
+			</property>
+		</bean>
+		
+		<bean id="sampleTeamplate" abstract="true">
+			<property name="message" value="Teamplate say hello"></property>
+		</bean>
+		<!-- <bean class="edu.java.spring.InitSampleBean"/> -->
+		
+		<!-- Annotation Based Configuration -->
+		<bean id="helloWorld2" class="edu.java.spring.HelloWorld" autowire="byName">
+			<property name="message" value="Hello Annation based Configuration"></property>
+		</bean>
+		
+		<!-- Annotation Based Configuration 1 -->
+		<context:annotation-config/>
+		
+		<!-- Context Event -->
+		<bean id="startEventHandler" class="edu.java.spring.ContextStartEventHandler" />
+</beans>

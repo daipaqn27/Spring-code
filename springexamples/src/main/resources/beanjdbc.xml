@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/jdbc
+		http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+		"
+		>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="org.apache.derby.jdbc.EmbeddedDriver"/>
+		<property name="url" 
+			value="jdbc:derby:D:/Code Spring/dbtemp/sampledb2;create=true"/>
+		<property name="username" value=""/>
+		<property name="password" value=""/>
+	</bean>
+	
+	<jdbc:embedded-database type="DERBY" id="dataSource">
+		<jdbc:script location="classpath:schema.sql"/>
+	</jdbc:embedded-database>
+	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="studentJdbcDAO" class="edu.java.spring.jdbc.StudentJdbcDAO">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="insertSQL" value="insert into Student(name,age) values(?,?)"/>
+		<property name="updateAgeByNameSQL" 
+			value="update Student set age=? where name=?"></property>
+		<property name="deleteByIdSQL" 
+			value="delete from Student where id=?"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+	</bean>
+	
+	<!--<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="studentJdbcDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTableIfNotExist</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>student</value>
+				<value>create table student(
+					id bigint primary key generated always as identity(
+						start with 1, increment by 1),
+					name varchar(1000),
+					age integer
+				)</value>
+			</list>
+		</property>
+	</bean>-->
+</beans>
