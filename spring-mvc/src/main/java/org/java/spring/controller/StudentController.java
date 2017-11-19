@@ -6,10 +6,13 @@ import org.java.spring.dao.StudentDAO;
 import org.java.spring.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class StudentController {
@@ -43,8 +46,42 @@ public class StudentController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("student.view");
 		mv.addObject("student", student);
-		studentDAO.insert(student);
+		
+		if(student.getId() > 0){
+			studentDAO.update(student);
+		}else{
+			studentDAO.insert(student);
+		}
+		return new ModelAndView("redirect:/student/list");
+	}
+	
+	@RequestMapping(value = "/student/list", method = RequestMethod.GET)
+	public ModelAndView listStudent(){
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("student.list");
+		mv.addObject("students", studentDAO.list());
 		return mv;
 	}
 	
+	@RequestMapping(value = "/student/delete/{id}", method = RequestMethod.GET)
+	public ModelAndView delete(@PathVariable int id){
+		studentDAO.delete(id);
+		return new ModelAndView("redirect:/student/list");
+	}
+	
+	@RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
+	public ModelAndView edit(@PathVariable int id){
+		Student student = studentDAO.get(id);
+		return new ModelAndView("student.form", "command", student);
+	}
+	
+	@RequestMapping(value = "student/edit/save", method = RequestMethod.GET)
+	public ModelAndView saveEdit(){
+		return new ModelAndView("forward:/student/save");
+	}
+	
+	@RequestMapping(value = "/student/json/{id}", method = RequestMethod.GET)
+	public @ResponseBody Student viewJson(@PathVariable int id){
+		return studentDAO.get(id);
+	}
 }

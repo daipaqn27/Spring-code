@@ -10,6 +10,7 @@
 <body>
 	<h2>Please input student information</h2>
 	<form:form action="save" method="post">
+	<form:hidden path="id"/>
 		<table>
 			<tr>
 				<td>Name</td>

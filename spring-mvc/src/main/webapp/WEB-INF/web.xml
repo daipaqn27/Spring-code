@@ -16,6 +16,8 @@
   </servlet-mapping>
   
   <listener>
-  	<listener-class>org.java.spring.AppContextLoaderListener</listener-class>
+  	<listener-class>
+  		org.java.spring.AppContextLoaderListener
+  	</listener-class>
   </listener>
 </web-app>
