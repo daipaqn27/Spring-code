@@ -1,10 +1,14 @@
 package org.java.spring.model;
 
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
+@XmlRootElement(name = "item")
 public class Student {
 	private int id;
 	
@@ -22,6 +26,7 @@ public class Student {
 
 	public Student(){}
 	
+	@XmlAttribute
 	public int getId() {
 		return id;
 	}
@@ -30,6 +35,7 @@ public class Student {
 		this.id = id;
 	}
 
+	@XmlElement
 	public String getName() {
 		return name;
 	}
@@ -38,6 +44,7 @@ public class Student {
 		this.name = name;
 	}
 
+	@XmlElement
 	public String getAge() {
 		return age;
 	}

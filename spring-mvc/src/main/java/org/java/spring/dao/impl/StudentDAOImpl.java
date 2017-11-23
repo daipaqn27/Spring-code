@@ -99,4 +99,20 @@ public class StudentDAOImpl implements StudentDAO, DisposableBean{
 	public void update(Student student) {
 		jdbcTemplate.update("update student set name = ? where id = ?", student.getName(), student.getId());
 	}
+
+	@Override
+	public List<Student> getListStudentByName(String name) {
+		return jdbcTemplate.query("select * from student where name like '%" + name + "%'", 
+				new RowMapper<Student>() {
+
+					@Override
+					public Student mapRow(ResultSet rs, int i) throws SQLException {
+						Student student = new Student();
+						student.setId(rs.getInt("id"));
+						student.setName(rs.getString("name"));
+						student.setAge(rs.getString("age"));
+						return student;
+					}
+				});
+	}
 }
